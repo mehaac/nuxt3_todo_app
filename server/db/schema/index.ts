@@ -4,6 +4,9 @@ export const user = pgTable('auth_user', {
   id: varchar('id', {
     length: 15, // change this when using custom user ids
   }).primaryKey(),
+  username: varchar('username', {
+    length: 32,
+  }).notNull(),
   // other user attributes
 })
 

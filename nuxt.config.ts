@@ -41,6 +41,7 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ['/'],
     },
+    moduleSideEffects: ['lucia/polyfill/node'],
   },
 
   app: {
@@ -59,6 +60,9 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    dev: '',
+    githubClientId: '',
+    githubClientSecret: '',
     supabase: {
       databaseUrl: '',
     },

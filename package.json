@@ -14,9 +14,12 @@
     "drizzle-generate": "drizzle-kit generate:pg"
   },
   "dependencies": {
+    "@lucia-auth/adapter-postgresql": "^2.0.2",
+    "@lucia-auth/oauth": "^3.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "drizzle-orm": "^0.29.3",
+    "lucia": "^2.7.6",
     "lucide-vue-next": "^0.303.0",
     "postgres": "^3.4.3",
     "radix-vue": "^1.2.5",
