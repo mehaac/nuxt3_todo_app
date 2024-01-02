@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
   middleware: ['protected'],
+  layout: 'default',
 })
 
 const user = useAuthenticatedUser()
@@ -17,10 +18,11 @@ async function handleLogout(e: Event) {
 </script>
 
 <template>
-  <DarkToggle />
-  <h1>Profile</h1>
-  <p>GitHub username: {{ user.githubUsername }}</p>
-  <form method="post" action="/api/logout" @submit.prevent="handleLogout">
-    <input type="submit" value="Sign out">
-  </form>
+  <div>
+    <h1>Profile</h1>
+    <p>GitHub username: {{ user.githubUsername }}</p>
+    <form method="post" action="/api/logout" @submit.prevent="handleLogout">
+      <input type="submit" value="Sign out">
+    </form>
+  </div>
 </template>
