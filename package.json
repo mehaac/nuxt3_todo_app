@@ -10,7 +10,8 @@
     "start": "node .output/server/index.mjs",
     "start:generate": "npx serve .output/public",
     "lint": "eslint .",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "drizzle-generate": "drizzle-kit generate:pg"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

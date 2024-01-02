@@ -58,6 +58,11 @@ export default defineNuxtConfig({
       ],
     },
   },
+  runtimeConfig: {
+    supabase: {
+      databaseUrl: '',
+    },
+  },
 
   devtools: {
     enabled: true,
