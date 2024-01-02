@@ -19,7 +19,6 @@ async function handleLogout(e: Event) {
 <template>
   <DarkToggle />
   <h1>Profile</h1>
-  <p>User id: {{ user.userId }}</p>
   <p>GitHub username: {{ user.githubUsername }}</p>
   <form method="post" action="/api/logout" @submit.prevent="handleLogout">
     <input type="submit" value="Sign out">
