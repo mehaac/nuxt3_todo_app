@@ -17,7 +17,9 @@ function toggleDark() {
 </script>
 
 <template>
-  <Button variant="default" size="icon" @click="toggleDark">
-    <Icon :name="color.value === 'dark' ? 'i-carbon-sun' : 'i-carbon-moon'" size="24" />
-  </Button>
+  <ClientOnly>
+    <Button v-if="color.value" variant="default" size="icon" @click="toggleDark">
+      <Icon :name="color.value === 'dark' ? 'i-carbon-sun' : 'i-carbon-moon'" size="24" />
+    </Button>
+  </ClientOnly>
 </template>
