@@ -12,18 +12,6 @@ definePageMeta({
   middleware: ['protected'],
   layout: 'default',
 })
-
-const user = useAuthenticatedUser()
-
-async function handleLogout(e: Event) {
-  if (!(e.target instanceof HTMLFormElement))
-    return
-  await $fetch('/api/logout', {
-    method: 'POST',
-    redirect: 'manual',
-  })
-  await navigateTo('/login')
-}
 </script>
 
 <template>

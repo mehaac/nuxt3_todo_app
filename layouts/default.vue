@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { UiSeparator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
-import { UiMuted } from '~/components/ui/typography'
 </script>
 
 <template>
@@ -13,29 +11,8 @@ import { UiMuted } from '~/components/ui/typography'
           tag{{ n }}
         </Badge>
       </div>
-      <slot />
+      <!-- <slot /> -->
     </main>
-    <footer class="px-6 py-4 flex flex-col gap-2 bg-background">
-      <UiSeparator orientation="horizontal" />
-      <div class="flex justify-between h-12">
-        <div class="flex flex-col gap-2">
-          <div>
-            <UiMuted>
-              copyright (C) mehaac
-            </UiMuted>
-          </div>
-          <div>
-            <UiMuted>
-              GitHub
-            </UiMuted>
-          </div>
-        </div>
-        <div>
-          <UiMuted>
-            privacy | policy
-          </UiMuted>
-        </div>
-      </div>
-    </footer>
+    <TheFooter />
   </div>
 </template>
