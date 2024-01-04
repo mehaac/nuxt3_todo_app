@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
           tag{{ n }}
         </Badge>
       </div>
-      <!-- <slot /> -->
+      <slot>[Slot] </slot>
     </main>
     <TheFooter />
   </div>

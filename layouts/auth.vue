@@ -3,7 +3,7 @@
 
 <template>
   <div class="flex flex-col h-[100dvh]">
-    <slot />
+    <slot>[Slot] </slot>
     <TheFooter />
   </div>
 </template>
