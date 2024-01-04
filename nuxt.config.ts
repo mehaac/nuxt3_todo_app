@@ -67,7 +67,7 @@ export default defineNuxtConfig({
       databaseUrl: '',
     },
   },
-
+  ssr: false,
   devtools: {
     enabled: true,
   },

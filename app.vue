@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TooltipProvider } from './components/ui/tooltip'
 import { appName } from '~/constants'
 
 useHead({
@@ -7,9 +8,11 @@ useHead({
 </script>
 
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <TooltipProvider>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </TooltipProvider>
 </template>
 
 <style>
