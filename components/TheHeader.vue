@@ -44,7 +44,6 @@ import {
         <DropdownMenuContent>
           <DropdownMenuLabel>User</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem class="w-full flex justify-center" />
           <DropdownMenuItem>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
