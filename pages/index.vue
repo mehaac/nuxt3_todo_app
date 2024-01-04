@@ -10,7 +10,6 @@ import {
 
 definePageMeta({
   middleware: ['protected'],
-  layout: 'default',
 })
 </script>
 
