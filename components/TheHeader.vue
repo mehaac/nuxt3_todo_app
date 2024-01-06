@@ -41,8 +41,8 @@ async function handleLogout(e: Event) {
       </div>
       <DarkToggle />
       <Tooltip :delay-duration="0">
-        <TooltipTrigger>
-          <Avatar class="avatar">
+        <TooltipTrigger as-child>
+          <Avatar>
             <AvatarImage :src="`https://avatars.githubusercontent.com/${user.githubUsername}`" :alt="`github ${user.githubUsername} avatar`" />
             <AvatarFallback>{{ user.githubUsername }}</AvatarFallback>
           </Avatar>
