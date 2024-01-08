@@ -8,11 +8,17 @@ useHead({
 </script>
 
 <template>
-  <TooltipProvider>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </TooltipProvider>
+  <Suspense>
+    <TooltipProvider>
+      <NuxtLoadingIndicator />
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </TooltipProvider>
+    <template #fallback>
+      Loading...
+    </template>
+  </Suspense>
 </template>
 
 <style>
