@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "build": "nuxi build",
-    "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
     "dev": "nuxi dev",
     "generate": "nuxi generate",
     "postinstall": "nuxi prepare",
@@ -11,7 +10,8 @@
     "start:generate": "npx serve .output/public",
     "lint": "eslint .",
     "typecheck": "vue-tsc --noEmit",
-    "drizzle-generate": "drizzle-kit generate:pg"
+    "drizzle-generate": "drizzle-kit generate:pg",
+    "drizzle-migrate": "drizzle-kit push:pg"
   },
   "dependencies": {
     "@lucia-auth/adapter-postgresql": "^2.0.2",
