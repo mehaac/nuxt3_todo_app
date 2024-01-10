@@ -29,6 +29,20 @@
       "when": 1704802540955,
       "tag": "0003_chunky_warstar",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1704873003972,
+      "tag": "0004_abandoned_hobgoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1704873188415,
+      "tag": "0005_neat_spacker_dave",
+      "breakpoints": true
     }
   ]
 }
