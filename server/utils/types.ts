@@ -12,7 +12,9 @@ export const taskDtoSchema = z.object({
   updatedAt: z.string().datetime(),
 })
 
-export const taskFormSchema = taskDtoSchema.omit({ id: true, userId: true })
+export const taskFormSchema = taskDtoSchema.omit({ id: true, userId: true }).extend({
+  priority: z.coerce.number({ required_error: 'Please select priority ' }).min(0).max(5),
+})
 
 export type TaskDto = z.infer<typeof taskDtoSchema>
 export type TaskForm = z.infer<typeof taskFormSchema>
