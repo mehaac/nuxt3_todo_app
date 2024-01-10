@@ -1,9 +1,7 @@
 import { db, schema } from '~/server/db'
 
 export default defineEventHandler(async (event) => {
-  const authRequest = auth.handleRequest(event)
-  const session = await authRequest.validate()
-  const user = session?.user
+  const user = event.context.user
   if (!user)
     throw createError({ statusCode: 401, message: 'Unauthorized' })
   const profile = await db.query.userProfile.findFirst({
