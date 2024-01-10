@@ -1,6 +1,8 @@
 import { relations } from 'drizzle-orm'
 import { bigint, pgEnum, pgTable, smallint, timestamp, varchar } from 'drizzle-orm/pg-core'
 
+import { TaskStatus } from '../../utils/'
+
 export const user = pgTable('auth_user', {
   id: varchar('id', {
     length: 15, // change this when using custom user ids
@@ -43,7 +45,7 @@ export const key = pgTable('user_key', {
 })
 
 export const userRole = pgEnum('role', ['admin', 'user'] as const)
-export const taskStatus = pgEnum('status', ['todo', 'in-progress', 'done'] as const)
+export const taskStatus = pgEnum('status', TaskStatus)
 
 export const userProfile = pgTable('user_profile', {
   id: varchar('id', {
@@ -59,7 +61,7 @@ export const userProfile = pgTable('user_profile', {
 
 export const task = pgTable('task', {
   id: varchar('id', {
-    length: 32,
+    length: 64,
   }).primaryKey(),
   userId: varchar('user_id', {
     length: 15,
@@ -71,8 +73,8 @@ export const task = pgTable('task', {
   }).notNull(),
   priority: smallint('priority').notNull(),
   status: taskStatus('status').notNull(),
-  createdAt: timestamp('created_at', { precision: 3, mode: 'date', withTimezone: true }).notNull(),
-  updatedAt: timestamp('updated_at', { precision: 3, mode: 'date', withTimezone: true }).notNull(),
+  createdAt: timestamp('created_at', { precision: 3, mode: 'string', withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { precision: 3, mode: 'string', withTimezone: true }).notNull(),
 })
 
 export const userRelations = relations(user, ({ many, one }) => ({
