@@ -2,31 +2,34 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import { vAutoAnimate } from '@formkit/auto-animate/vue'
+import { useQueryClient } from '@tanstack/vue-query'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
-import { Input } from './ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Button } from './ui/button'
+import { Textarea } from './ui/textarea'
+import { UiMuted } from './ui/typography'
 import { TaskStatus, taskFormSchema } from '~/server/utils'
 
-const formSchema = toTypedSchema(taskFormSchema)
-const formatted = useDateFormat(useNow(), 'YYYY-MM-DDTHH:mm:ssZ')
+const queryClient = useQueryClient()
 
 const form = useForm({
-  validationSchema: formSchema,
+  validationSchema: toTypedSchema(taskFormSchema),
   initialValues: {
-    updatedAt: formatted.value,
-    createdAt: formatted.value,
+    updatedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   },
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
   try {
-    await $fetch('/api/task/task', {
+    const res = await $fetch('/api/task/', {
       key: 'tasks',
       method: 'POST',
       body: values,
     })
-    await refreshNuxtData('tasks')
+    if (res[0].id)
+      queryClient.setQueryData(['task', 'all'], data => [res[0], ...data])
+    form.resetForm()
   }
   catch (e) {
     console.error(e)
@@ -42,7 +45,15 @@ const onSubmit = form.handleSubmit(async (values) => {
           <FormItem v-auto-animate>
             <FormLabel>Text...</FormLabel>
             <FormControl>
-              <Input type="text" placeholder="Task text..." v-bind="componentField" />
+              <div class="flex flex-col items-end gap-2">
+                <Textarea type="text" placeholder="Task text..." v-bind="componentField" />
+                <UiMuted
+                  :class="{
+                    'text-red-600': componentField.modelValue?.length > 255 || componentField.modelValue?.length < 4 } "
+                >
+                  {{ componentField.modelValue?.length ?? 0 }}/255
+                </UiMuted>
+              </div>
             </FormControl>
             <FormDescription>
               Enter task text

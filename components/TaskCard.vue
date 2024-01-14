@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { Button } from './ui/button'
+import { UiLarge } from './ui/typography'
 import {
   Card,
   CardContent,
@@ -6,41 +11,133 @@ import {
   CardHeader,
 } from '@/components/ui/card'
 import { UiSeparator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
+import TaskFormPrioritySelect from '@/components/task/form/PrioritySelect.vue'
+import { updateTaskSchema } from '~/server/utils'
+import TaskFormStatusSelect from '@/components/task/form/StatusSelect.vue'
+import TaskFormTextarea from '@/components/task/form/Textarea.vue'
 
-const text = ref('Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit aut, pariatur laborum quo commodi fuga nostrum. Dignissimos veritatis eum rem vel, veniam maiores quasi, reiciendis voluptate quam, porro rerum officiis?')
+interface Props {
+  task: TaskDto
+}
+
+const props = defineProps<Props>()
+
+const queryClient = useQueryClient()
+
+const { data, status, suspense } = useQuery({
+  queryKey: ['task', 'detail', toValue(props.task.id)],
+  queryFn: async () => await $fetch(`/api/task/${toValue(props.task.id)}`, {
+    method: 'GET',
+  }),
+  initialData: props.task,
+  refetchOnMount: false,
+  refetchOnWindowFocus: false,
+})
+
+await suspense()
+
+const { handleSubmit, values } = useForm({
+  validationSchema: toTypedSchema(updateTaskSchema),
+  initialValues: {
+    priority: data.value.priority,
+    status: data.value.status,
+    text: data.value.text,
+    updatedAt: new Date().toISOString(),
+  },
+})
+
+const { mutate: updateTask } = useMutation({
+  mutationKey: ['task', 'detail', toValue(props.task.id)],
+  mutationFn: async (body: Partial<TaskDto>) => await $fetch(`/api/task/${toValue(props.task.id)}`, {
+    method: 'PUT',
+    body,
+  }),
+  onSuccess: (data) => {
+    queryClient.setQueryData(['task', 'detail', toValue(props.task.id)], x => ({ ...x, ...data }))
+  },
+})
+
+const { mutate: deleteTask } = useMutation({
+  mutationKey: ['task', 'detail', toValue(props.task.id)],
+  mutationFn: async () => await $fetch(`/api/task/${toValue(props.task.id)}`, {
+    method: 'DELETE',
+  }),
+  onSuccess: () => {
+    queryClient.setQueryData(['task', 'all'], data => (data as TaskDto[]).filter(task => task.id !== toValue(props.task.id)))
+  },
+})
+const submit = handleSubmit((values) => {
+  updateTask(values)
+})
+
+// priority watch
+watch(() => toValue(values.priority), () => {
+  submit()
+})
+// status watch
+watch(() => toValue(values.status), () => {
+  submit()
+})
+// watch text
+// watchDebounced(() => toValue(values.text), () => {
+//   submit()
+// }, {
+//   debounce: 1000,
+//   maxWait: 1000 * 60,
+// })
+const isEdited = ref(false)
+
+function handleUpdateText() {
+  submit()
+  isEdited.value = !isEdited.value
+}
+
+function handleDelete() {
+  deleteTask()
+}
+// YYYY-MM-DD HH:mm:ss Do MMMM HH:mm
+const formattedCreatedAt = useDateFormat(props.task.createdAt, 'Do MMMM HH:mm', {
+  // locales: 'ru-RU',
+})
 </script>
 
 <template>
-  <Card class=" max-w-full min-w-full overflow-hidden flex flex-col">
-    <CardHeader class="p-2">
+  <Card v-if="data && status !== 'error'" class="overflow-hidden flex flex-col" as="article">
+    <CardHeader class="">
       <div class="flex gap-4">
         <div>
-          status
+          <TaskFormPrioritySelect />
         </div>
         <div>
-          priority
-        </div>
-        <div>
-          time add
+          <TaskFormStatusSelect />
         </div>
         <div class="ml-auto">
-          o
+          {{ formattedCreatedAt }}
         </div>
       </div>
     </CardHeader>
-    <UiSeparator orientation="horizontal" />
-    <CardContent class="grow p-2 overflow-y-auto flex flex-col w-full gap-2">
-      {{ text }}
+    <UiSeparator orientation="horizontal" class="mb-5" />
+    <CardContent class="flex flex-col gap-2  grow-[2]">
+      <Button v-show="!isEdited" variant="link" class="min-h-full h-full">
+        <UiLarge class="break-all" @click="isEdited = !isEdited">
+          {{ values.text }}
+        </UiLarge>
+      </Button>
+      <div v-show="isEdited" class="flex flex-col gap-2">
+        <TaskFormTextarea />
+        <Button
+          variant="outline" @click="handleUpdateText"
+        >
+          Edit
+        </Button>
+      </div>
     </CardContent>
-    <UiSeparator orientation="horizontal" />
-    <CardFooter class="flex p-2">
-      <div class="overflow-hidden">
-        <div class="flex overflow-x-auto py-2 gap-2 ">
-          <Badge v-for="n in 4" :key="n" as="button">
-            tag{{ n }}
-          </Badge>
-        </div>
+    <UiSeparator orientation="horizontal" class="mb-5 text-start" />
+    <CardFooter>
+      <div>
+        <Button variant="destructive" @click="handleDelete">
+          Delete
+        </Button>
       </div>
     </CardFooter>
   </Card>

@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, message: 'Unauthorized' })
   const task = await db.query.task.findMany({
     where: (task, { eq }) => eq(task.userId, user.userId),
+    orderBy: (task, { desc }) => [desc(task.createdAt)],
   })
 
   return task
