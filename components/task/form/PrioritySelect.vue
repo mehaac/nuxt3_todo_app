@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { FormControl, FormField, FormItem } from '~/components/ui/form'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
+
+defineProps<{
+  disabled?: boolean
+}>()
 </script>
 
 <template>
@@ -11,6 +15,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
           ...componentField,
           modelValue: componentField.modelValue.toString(),
         }"
+        :disabled="disabled"
       >
         <FormControl>
           <SelectTrigger>

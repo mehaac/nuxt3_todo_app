@@ -2,11 +2,15 @@
 import { FormField } from '~/components/ui/form'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { TaskStatus } from '~/server/utils'
+
+defineProps<{
+  disabled?: boolean
+}>()
 </script>
 
 <template>
   <FormField v-slot="{ componentField }" name="status">
-    <Select v-bind="componentField">
+    <Select v-bind="componentField" :disabled="disabled">
       <SelectTrigger>
         <SelectValue placeholder="Select status..." />
       </SelectTrigger>

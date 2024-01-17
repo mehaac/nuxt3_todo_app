@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { vAutoAnimate } from '@formkit/auto-animate/vue'
 import { useQueryClient } from '@tanstack/vue-query'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
+import { vAutoAnimate } from '@formkit/auto-animate/vue'
+import { FormControl, FormDescription, FormField, FormItem, FormMessage } from './ui/form'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 import { UiMuted } from './ui/typography'
 import { TaskStatus, taskFormSchema } from '~/server/utils'
+
+const emit = defineEmits<{
+  success: []
+}>()
 
 const queryClient = useQueryClient()
 
@@ -19,17 +23,21 @@ const form = useForm({
     createdAt: new Date().toISOString(),
   },
 })
-
 const onSubmit = form.handleSubmit(async (values) => {
   try {
-    const res = await $fetch('/api/task/', {
+    await $fetch('/api/task/', {
       key: 'tasks',
       method: 'POST',
       body: values,
     })
-    if (res[0].id)
-      queryClient.setQueryData(['task', 'all'], data => [res[0], ...data])
+    queryClient.invalidateQueries({ queryKey: ['task', 'all'] })
+    // if (res[0].id) {
+    //   queryClient.setQueryData(['task', 'all'], (data) => {
+    //     return [res[0], ...data]
+    //   })
+    // }
     form.resetForm()
+    emit('success')
   }
   catch (e) {
     console.error(e)
@@ -40,29 +48,27 @@ const onSubmit = form.handleSubmit(async (values) => {
 <template>
   <form @submit.prevent="onSubmit">
     <div class="flex flex-col gap-4 items-center">
-      <div class="flex flex-col gap-2 min-w-[320px]">
+      <div class="flex flex-col gap-5 min-w-[320px]">
         <FormField v-slot="{ componentField }" name="text">
-          <FormItem v-auto-animate>
-            <FormLabel>Text...</FormLabel>
+          <FormItem>
             <FormControl>
-              <div class="flex flex-col items-end gap-2">
+              <div class="pt-4">
                 <Textarea type="text" placeholder="Task text..." v-bind="componentField" />
-                <UiMuted
-                  :class="{
-                    'text-red-600': componentField.modelValue?.length > 255 || componentField.modelValue?.length < 4 } "
-                >
-                  {{ componentField.modelValue?.length ?? 0 }}/255
-                </UiMuted>
               </div>
             </FormControl>
-            <FormDescription>
-              Enter task text
+            <FormDescription as-child>
+              <UiMuted
+                :class="{
+                  'text-red-600': componentField.modelValue?.length > 255 || componentField.modelValue?.length < 4 } "
+              >
+                {{ componentField.modelValue?.length ?? 0 }}/255
+              </UiMuted>
             </FormDescription>
             <FormMessage />
           </FormItem>
         </FormField>
         <FormField v-slot="{ componentField }" name="status">
-          <FormItem>
+          <FormItem v-auto-animate>
             <Select v-bind="componentField">
               <FormControl>
                 <SelectTrigger>
@@ -77,10 +83,11 @@ const onSubmit = form.handleSubmit(async (values) => {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <FormMessage />
           </FormItem>
         </FormField>
         <FormField v-slot="{ componentField }" name="priority">
-          <FormItem>
+          <FormItem v-auto-animate>
             <Select v-bind="componentField">
               <FormControl>
                 <SelectTrigger>
@@ -95,6 +102,7 @@ const onSubmit = form.handleSubmit(async (values) => {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <FormMessage />
           </FormItem>
         </FormField>
       </div>

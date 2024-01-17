@@ -3,8 +3,8 @@ import z from 'zod'
 export const TaskStatus = ['todo', 'in-progress', 'done'] as const
 
 export const taskDtoSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.string(),
+  userId: z.string(),
   text: z.string().min(4).max(255),
   priority: z.number().min(0).max(5),
   status: z.enum(TaskStatus),
@@ -13,7 +13,8 @@ export const taskDtoSchema = z.object({
 })
 
 export const taskFormSchema = taskDtoSchema.omit({ id: true, userId: true }).extend({
-  priority: z.coerce.number({ required_error: 'Please select priority ' }).min(0).max(5),
+  priority: z.coerce.number({ required_error: 'Required priority', invalid_type_error: 'Required priority' }).min(0).max(5),
+  status: z.enum(TaskStatus, { required_error: 'Required status', invalid_type_error: 'Required status' }),
 })
 export const updateTaskSchema = taskFormSchema.omit({ createdAt: true }).partial()
 

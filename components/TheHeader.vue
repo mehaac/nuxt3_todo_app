@@ -26,6 +26,8 @@ async function handleLogout(e: Event) {
   })
   await navigateTo('/login')
 }
+
+const search = useSearchStore()
 </script>
 
 <template>
@@ -37,8 +39,14 @@ async function handleLogout(e: Event) {
         </UiLarge>
       </NuxtLink>
       <div class="search w-full">
-        <Input type="text" placeholder="Search..." />
+        <Input
+          type="text"
+          placeholder="Search..."
+          :model-value="search.filter"
+          @update:model-value="(val) => search.setFilter(val.toString())"
+        />
       </div>
+      <slot />
       <DarkToggle />
       <Tooltip :delay-duration="0">
         <TooltipTrigger as-child>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { Button } from './ui/button'
@@ -24,46 +24,37 @@ const props = defineProps<Props>()
 
 const queryClient = useQueryClient()
 
-const { data, status, suspense } = useQuery({
-  queryKey: ['task', 'detail', toValue(props.task.id)],
-  queryFn: async () => await $fetch(`/api/task/${toValue(props.task.id)}`, {
-    method: 'GET',
-  }),
-  initialData: props.task,
-  refetchOnMount: false,
-  refetchOnWindowFocus: false,
-})
-
-await suspense()
-
 const { handleSubmit, values } = useForm({
   validationSchema: toTypedSchema(updateTaskSchema),
   initialValues: {
-    priority: data.value.priority,
-    status: data.value.status,
-    text: data.value.text,
+    priority: props.task.priority,
+    status: props.task.status,
+    text: props.task.text,
     updatedAt: new Date().toISOString(),
   },
 })
 
-const { mutate: updateTask } = useMutation({
+const { mutate: updateTask, isPending: isUpdating } = useMutation({
   mutationKey: ['task', 'detail', toValue(props.task.id)],
   mutationFn: async (body: Partial<TaskDto>) => await $fetch(`/api/task/${toValue(props.task.id)}`, {
     method: 'PUT',
     body,
   }),
-  onSuccess: (data) => {
-    queryClient.setQueryData(['task', 'detail', toValue(props.task.id)], x => ({ ...x, ...data }))
+  onMutate: async () => {
+    await queryClient.cancelQueries({ queryKey: ['task'] })
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['task'] })
   },
 })
 
-const { mutate: deleteTask } = useMutation({
+const { mutate: deleteTask, isPending: isDeleting } = useMutation({
   mutationKey: ['task', 'detail', toValue(props.task.id)],
   mutationFn: async () => await $fetch(`/api/task/${toValue(props.task.id)}`, {
     method: 'DELETE',
   }),
   onSuccess: () => {
-    queryClient.setQueryData(['task', 'all'], data => (data as TaskDto[]).filter(task => task.id !== toValue(props.task.id)))
+    queryClient.invalidateQueries({ queryKey: ['task'] })
   },
 })
 const submit = handleSubmit((values) => {
@@ -74,17 +65,11 @@ const submit = handleSubmit((values) => {
 watch(() => toValue(values.priority), () => {
   submit()
 })
-// status watch
+// // status watch
 watch(() => toValue(values.status), () => {
   submit()
 })
-// watch text
-// watchDebounced(() => toValue(values.text), () => {
-//   submit()
-// }, {
-//   debounce: 1000,
-//   maxWait: 1000 * 60,
-// })
+
 const isEdited = ref(false)
 
 function handleUpdateText() {
@@ -102,14 +87,16 @@ const formattedCreatedAt = useDateFormat(props.task.createdAt, 'Do MMMM HH:mm', 
 </script>
 
 <template>
-  <Card v-if="data && status !== 'error'" class="overflow-hidden flex flex-col" as="article">
+  <Card
+    class="overflow-hidden flex flex-col max-w-xl w-full min-w-[320px]" as="article"
+  >
     <CardHeader class="">
       <div class="flex gap-4">
         <div>
-          <TaskFormPrioritySelect />
+          <TaskFormPrioritySelect :disabled="isDeleting || isUpdating" />
         </div>
         <div>
-          <TaskFormStatusSelect />
+          <TaskFormStatusSelect :disabled="isDeleting || isUpdating" />
         </div>
         <div class="ml-auto">
           {{ formattedCreatedAt }}
@@ -118,9 +105,9 @@ const formattedCreatedAt = useDateFormat(props.task.createdAt, 'Do MMMM HH:mm', 
     </CardHeader>
     <UiSeparator orientation="horizontal" class="mb-5" />
     <CardContent class="flex flex-col gap-2  grow-[2]">
-      <Button v-show="!isEdited" variant="link" class="min-h-full h-full">
+      <Button v-show="!isEdited" variant="link" class="min-h-full h-full" :disabled="isDeleting || isUpdating">
         <UiLarge class="break-all" @click="isEdited = !isEdited">
-          {{ values.text }}
+          {{ task.text }}
         </UiLarge>
       </Button>
       <div v-show="isEdited" class="flex flex-col gap-2">
@@ -134,10 +121,13 @@ const formattedCreatedAt = useDateFormat(props.task.createdAt, 'Do MMMM HH:mm', 
     </CardContent>
     <UiSeparator orientation="horizontal" class="mb-5 text-start" />
     <CardFooter>
-      <div>
-        <Button variant="destructive" @click="handleDelete">
+      <div class="flex gap-4 items-center justify-between">
+        <Button variant="destructive" :disabled="isDeleting" @click="handleDelete">
           Delete
         </Button>
+        <div v-show="isUpdating">
+          <Icon name="carbon:progress-bar-round" size="32" class="animate-spin" />
+        </div>
       </div>
     </CardFooter>
   </Card>
