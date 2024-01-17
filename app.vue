@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Toaster } from './components/ui/toast'
 import { TooltipProvider } from './components/ui/tooltip'
 import { appName } from '~/constants'
 
@@ -13,6 +14,7 @@ useHead({
       <NuxtLoadingIndicator />
       <NuxtLayout>
         <NuxtPage />
+        <Toaster />
       </NuxtLayout>
     </TooltipProvider>
     <template #fallback>

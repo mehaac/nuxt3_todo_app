@@ -24,6 +24,8 @@ const queryClient = useQueryClient()
 const limit = ref(3)
 const currentPage = ref(1)
 const searchStore = useSearchStore()
+
+const { filter, status: searchStatus } = storeToRefs(searchStore)
 const calcOffset = computed(() => {
   return (currentPage.value - 1) * limit.value
 })
@@ -39,10 +41,29 @@ const { data: tasks, status } = useQuery({
   staleTime: 1000 * 60 * 5,
 })
 
-const parsedData = computed(() => {
-  return taskDtoSchema.array().safeParse(tasks.value?.[0])
+const { data: tasksFiltered } = useQuery({
+  queryKey: ['task', 'all', 'offset: ', calcOffset, 'limit: ', limit, filter],
+  queryFn: async () => await $fetch('/api/task/', {
+    query: {
+      search: filter.value,
+      offset: calcOffset.value,
+      limit: limit.value,
+    },
+    method: 'GET',
+  }),
+  enabled: () => searchStatus.value === 'active',
+  refetchOnMount: false,
+  refetchOnWindowFocus: false,
+  staleTime: 1000 * 60 * 5,
 })
 
+const parsedData = computed(() => {
+  return searchStatus.value === 'active' ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
+})
+
+const taskCount = computed(() => {
+  return searchStatus.value === 'active' ? tasksFiltered.value?.[1].count : tasks.value?.[1].count
+})
 watch(tasks, (current) => {
   if (current) {
     current[0].forEach((task) => {
@@ -60,7 +81,7 @@ watch(tasks, (current) => {
         <Pagination
           v-slot="{ page }"
           v-model:page="currentPage"
-          :total="tasks?.[1].count"
+          :total="taskCount"
           :sibling-count="1"
           :items-per-page="limit"
           show-edges

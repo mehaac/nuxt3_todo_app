@@ -6,9 +6,13 @@ export const useSearchStore = defineStore('search:store', () => {
   async function setFilter(value: string) {
     filter.value = value
   }
+  const status = computed(() => {
+    return filter.value ? 'active' : 'inactive'
+  })
 
   return {
     filter: debounced,
     setFilter,
+    status,
   }
 })

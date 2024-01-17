@@ -9,12 +9,15 @@ import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 import { UiMuted } from './ui/typography'
 import { TaskStatus, taskFormSchema } from '~/server/utils'
+import { useToast } from '@/components/ui/toast/use-toast'
 
 const emit = defineEmits<{
   success: []
 }>()
 
 const queryClient = useQueryClient()
+
+const { toast } = useToast()
 
 const form = useForm({
   validationSchema: toTypedSchema(taskFormSchema),
@@ -37,6 +40,10 @@ const onSubmit = form.handleSubmit(async (values) => {
     //   })
     // }
     form.resetForm()
+    toast({
+      title: 'Success',
+      description: `Task was added to your task list`,
+    })
     emit('success')
   }
   catch (e) {

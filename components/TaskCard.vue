@@ -15,6 +15,7 @@ import TaskFormPrioritySelect from '@/components/task/form/PrioritySelect.vue'
 import { updateTaskSchema } from '~/server/utils'
 import TaskFormStatusSelect from '@/components/task/form/StatusSelect.vue'
 import TaskFormTextarea from '@/components/task/form/Textarea.vue'
+import { useToast } from '@/components/ui/toast'
 
 interface Props {
   task: TaskDto
@@ -23,7 +24,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const queryClient = useQueryClient()
-
+const { toast } = useToast()
 const { handleSubmit, values } = useForm({
   validationSchema: toTypedSchema(updateTaskSchema),
   initialValues: {
@@ -45,6 +46,10 @@ const { mutate: updateTask, isPending: isUpdating } = useMutation({
   },
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['task'] })
+    toast({
+      title: 'Updated',
+      description: `Task was updated`,
+    })
   },
 })
 
@@ -54,6 +59,10 @@ const { mutate: deleteTask, isPending: isDeleting } = useMutation({
     method: 'DELETE',
   }),
   onSuccess: () => {
+    toast({
+      title: 'Deleted',
+      description: `Task was deleted`,
+    })
     queryClient.invalidateQueries({ queryKey: ['task'] })
   },
 })
