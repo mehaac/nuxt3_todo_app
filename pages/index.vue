@@ -61,7 +61,7 @@ const parsedData = computed(() => {
   return filterStatus.value ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
 })
 const taskCount = computed(() => {
-  return filterStatus.value ? tasksFiltered.value?.[1].count : tasks.value?.[1].count
+  return filterStatus.value ? (tasksFiltered.value?.[1].count || 0) : (tasks.value?.[1].count || 0)
 })
 watch(tasks, (current) => {
   if (current) {
@@ -73,8 +73,8 @@ watch(tasks, (current) => {
 </script>
 
 <template>
-  <div class="flex flex-col sm:px-12 gap-4 relative grow overflow-y-scroll">
-    <div v-if="status === 'success' && parsedData.success" v-auto-animate class="flex flex-col gap-4 items-center grow ">
+  <div class="flex flex-col sm:px-12 gap-4 relative grow  overflow-auto">
+    <div v-if="status === 'success' && parsedData.success" v-auto-animate class="flex flex-col gap-4 items-center max-w-xl min-w-full  mx-auto">
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
       <div class="flex justify-center mt-auto pb-5">
         <Pagination
