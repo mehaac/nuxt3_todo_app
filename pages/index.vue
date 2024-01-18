@@ -15,6 +15,7 @@ import {
 import {
   Button,
 } from '~/components/ui/button'
+import { useSearchStore } from '~/stores/search'
 
 definePageMeta({
   middleware: ['protected'],
@@ -24,8 +25,7 @@ const queryClient = useQueryClient()
 const limit = ref(3)
 const currentPage = ref(1)
 const searchStore = useSearchStore()
-
-const { filter, status: searchStatus } = storeToRefs(searchStore)
+const { meta, params } = storeToRefs(searchStore)
 const calcOffset = computed(() => {
   return (currentPage.value - 1) * limit.value
 })
@@ -40,29 +40,28 @@ const { data: tasks, status } = useQuery({
   }),
   staleTime: 1000 * 60 * 5,
 })
-
 const { data: tasksFiltered } = useQuery({
-  queryKey: ['task', 'all', 'offset: ', calcOffset, 'limit: ', limit, filter],
+  queryKey: ['task', 'all', 'offset: ', calcOffset, 'limit: ', limit, params],
   queryFn: async () => await $fetch('/api/task/', {
     query: {
-      search: filter.value,
       offset: calcOffset.value,
       limit: limit.value,
+      search: params.value.filter,
+      priority: params.value.priority,
+      status: params.value.status,
     },
     method: 'GET',
   }),
-  enabled: () => searchStatus.value === 'active',
+  enabled: () => meta.value.dirty,
   refetchOnMount: false,
   refetchOnWindowFocus: false,
   staleTime: 1000 * 60 * 5,
 })
-
 const parsedData = computed(() => {
-  return searchStatus.value === 'active' ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
+  return meta.value.dirty ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
 })
-
 const taskCount = computed(() => {
-  return searchStatus.value === 'active' ? tasksFiltered.value?.[1].count : tasks.value?.[1].count
+  return meta.value.dirty ? tasksFiltered.value?.[1].count : tasks.value?.[1].count
 })
 watch(tasks, (current) => {
   if (current) {
@@ -74,14 +73,15 @@ watch(tasks, (current) => {
 </script>
 
 <template>
-  <div class="flex flex-col sm:px-12 gap-4 items-center relative grow overflow-y-scroll">
+  <div class="flex flex-col sm:px-12 gap-4 relative grow overflow-y-scroll">
     <div v-if="status === 'success' && parsedData.success" v-auto-animate class="flex flex-col gap-4 items-center grow ">
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
       <div class="flex justify-center mt-auto pb-5">
         <Pagination
+          v-if="+taskCount !== 0"
           v-slot="{ page }"
           v-model:page="currentPage"
-          :total="taskCount"
+          :total="+taskCount"
           :sibling-count="1"
           :items-per-page="limit"
           show-edges

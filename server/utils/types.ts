@@ -22,6 +22,8 @@ export type TaskDto = z.infer<typeof taskDtoSchema>
 export type TaskForm = z.infer<typeof taskFormSchema>
 export type UpdateTask = z.infer<typeof updateTaskSchema>
 
+export type TaskStatusType = typeof TaskStatus[number]
+
 export const taskParamSchema = z.object({
   id: z.string().min(1),
 })

@@ -1,6 +1,7 @@
 import { and, eq, ilike, sql } from 'drizzle-orm'
 import z from 'zod'
 import { db, schema } from '~/server/db'
+import { TaskStatus } from '~/server/utils'
 
 const paginationSchema = z.object({
   offset: z.coerce.number().default(0),
@@ -9,19 +10,31 @@ const paginationSchema = z.object({
 
 const searchSchema = paginationSchema.extend({
   search: z.string().optional(),
+  priority: z.coerce.number().optional(),
+  status: z.enum(TaskStatus).optional(),
 })
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
   if (!user)
     throw createError({ statusCode: 401, message: 'Unauthorized' })
-  const { limit, offset, search } = await getValidatedQuery(event, validate => searchSchema.parse(validate))
-  const isSearch = search && search.length > 0
+  const { limit, offset, search, priority, status } = await getValidatedQuery(event, validate => searchSchema.parse(validate))
 
+  const isSearch = search && search.length > 0
+  const isPriority = priority && priority > 0
+  const isStatus = status && status.length > 0
+  function queryBuilder() {
+    return [
+      isSearch ? ilike(schema.task.text, `%${search}%`) : undefined,
+      isPriority ? eq(schema.task.priority, priority) : undefined,
+      isStatus ? eq(schema.task.status, status) : undefined,
+    ]
+  }
+  const query = queryBuilder()
   const task = await db.query.task.findMany({
-    where: (task, { eq, and, ilike }) => and(
+    where: (task, { eq, and }) => and(
       eq(task.userId, user.userId),
-      isSearch ? ilike(task.text, `%${search}%`) : undefined,
+      ...query,
     ),
     orderBy: (task, { desc }) => [desc(task.createdAt)],
     limit,
@@ -32,7 +45,11 @@ export default defineEventHandler(async (event) => {
       count: sql<number>`count(*)`,
     })
     .from(schema.task)
-    .where(and(eq(schema.task.userId, user.userId), isSearch ? ilike(schema.task.text, `%${search}%`) : undefined))
+    .where(and(
+      eq(schema.task.userId, user.userId),
+      ...query,
+    ),
+    )
 
   const res = [
     task,

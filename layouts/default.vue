@@ -12,12 +12,13 @@ import { Button } from '~/components/ui/button'
 </script>
 
 <template>
-  <div class="h-[100dvh] overflow-hidden relative flex flex-col">
+  <div class="h-[100dvh] overflow-hidden  relative flex flex-col">
     <TheHeader />
     <div class="pb-6">
       <UiSeparator orientation="horizontal" />
     </div>
-    <main class="flex gap-2 flex-col overflow-y-auto px-6 relative grow-[1]">
+    <main class="flex gap-2 flex-col  px-6 relative grow-[1] overflow-y-hidden">
+      <FilterForm />
       <slot>[Slot] </slot>
     </main>
 
