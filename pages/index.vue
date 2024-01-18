@@ -25,7 +25,7 @@ const queryClient = useQueryClient()
 const limit = ref(3)
 const currentPage = ref(1)
 const searchStore = useSearchStore()
-const { meta, params } = storeToRefs(searchStore)
+const { status: filterStatus, params } = storeToRefs(searchStore)
 const calcOffset = computed(() => {
   return (currentPage.value - 1) * limit.value
 })
@@ -52,16 +52,16 @@ const { data: tasksFiltered } = useQuery({
     },
     method: 'GET',
   }),
-  enabled: () => meta.value.dirty,
+  enabled: () => filterStatus.value,
   refetchOnMount: false,
   refetchOnWindowFocus: false,
   staleTime: 1000 * 60 * 5,
 })
 const parsedData = computed(() => {
-  return meta.value.dirty ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
+  return filterStatus.value ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
 })
 const taskCount = computed(() => {
-  return meta.value.dirty ? tasksFiltered.value?.[1].count : tasks.value?.[1].count
+  return filterStatus.value ? tasksFiltered.value?.[1].count : tasks.value?.[1].count
 })
 watch(tasks, (current) => {
   if (current) {
