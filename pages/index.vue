@@ -66,7 +66,6 @@ watch(tasks, (current) => {
       v-auto-animate
       class="flex flex-col gap-4 items-center grow"
     >
-      <TaskCardSkeleton />
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
       <div class="flex justify-center mt-auto pb-5">
         <Pagination
@@ -100,8 +99,12 @@ watch(tasks, (current) => {
       </div>
     </div>
 
-    <div v-else>
-      Loading...
+    <div
+      v-else
+      v-auto-animate
+      class="flex flex-col gap-4 items-center grow"
+    >
+      <TaskCardSkeleton v-for="n in 3" :key="n" />
     </div>
   </div>
 </template>
