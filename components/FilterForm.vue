@@ -14,8 +14,8 @@ const searchStore = useSearchStore()
       <div class="max-w-max flex ">
         <TaskFilterPriority />
       </div>
-      <Button @click="searchStore.restForm()">
-        rest
+      <Button variant="outline" size="icon" @click="searchStore.restForm()">
+        <Icon name="carbon:reset" />
       </Button>
     </div>
   </div>
