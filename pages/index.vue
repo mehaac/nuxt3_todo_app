@@ -25,22 +25,11 @@ const queryClient = useQueryClient()
 const limit = ref(3)
 const currentPage = ref(1)
 const searchStore = useSearchStore()
-const { status: filterStatus, params } = storeToRefs(searchStore)
+const { params } = storeToRefs(searchStore)
 const calcOffset = computed(() => {
   return (currentPage.value - 1) * limit.value
 })
 const { data: tasks, status } = useQuery({
-  queryKey: ['task', 'all', 'offset: ', calcOffset, 'limit: ', limit],
-  queryFn: async () => await $fetch('/api/task/', {
-    query: {
-      offset: calcOffset.value,
-      limit: limit.value,
-    },
-    method: 'GET',
-  }),
-  staleTime: 1000 * 60 * 5,
-})
-const { data: tasksFiltered } = useQuery({
   queryKey: ['task', 'all', 'offset: ', calcOffset, 'limit: ', limit, params],
   queryFn: async () => await $fetch('/api/task/', {
     query: {
@@ -52,16 +41,14 @@ const { data: tasksFiltered } = useQuery({
     },
     method: 'GET',
   }),
-  enabled: () => filterStatus.value,
-  refetchOnMount: false,
-  refetchOnWindowFocus: false,
   staleTime: 1000 * 60 * 5,
 })
+
 const parsedData = computed(() => {
-  return filterStatus.value ? taskDtoSchema.array().safeParse(tasksFiltered.value?.[0]) : taskDtoSchema.array().safeParse(tasks.value?.[0])
+  return taskDtoSchema.array().safeParse(tasks.value?.[0])
 })
 const taskCount = computed(() => {
-  return filterStatus.value ? (tasksFiltered.value?.[1].count || 0) : (tasks.value?.[1].count || 0)
+  return tasks.value?.[1].count || 0
 })
 watch(tasks, (current) => {
   if (current) {
@@ -79,6 +66,7 @@ watch(tasks, (current) => {
       v-auto-animate
       class="flex flex-col gap-4 items-center grow"
     >
+      <TaskCardSkeleton />
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
       <div class="flex justify-center mt-auto pb-5">
         <Pagination
