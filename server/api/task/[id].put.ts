@@ -14,6 +14,6 @@ export default defineEventHandler (async (event) => {
   const updatedTask = await db.update(schema.task).set({
     ...body,
   }).where(eq(schema.task.id, params.id)).returning()
-  await new Promise((resolve) => { setTimeout(() => resolve(true), 2000) })
+
   return updatedTask
 })
