@@ -17,7 +17,7 @@ import { Button } from '~/components/ui/button'
     <div class="pb-6">
       <UiSeparator orientation="horizontal" />
     </div>
-    <main class="flex gap-2 flex-col  px-6 relative grow-[1] overflow-y-hidden">
+    <main class="flex gap-2 flex-col relative grow-[1] overflow-hidden">
       <FilterForm />
       <slot>[Slot] </slot>
     </main>

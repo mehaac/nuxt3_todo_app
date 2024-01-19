@@ -73,8 +73,12 @@ watch(tasks, (current) => {
 </script>
 
 <template>
-  <div class="flex flex-col sm:px-12 gap-4 relative grow  overflow-auto">
-    <div v-if="status === 'success' && parsedData.success" v-auto-animate class="flex flex-col gap-4 items-center max-w-xl min-w-full  mx-auto">
+  <div class="flex flex-col px-4 sm:px-12 gap-4 relative grow overflow-y-scroll">
+    <div
+      v-if="status === 'success' && parsedData.success"
+      v-auto-animate
+      class="flex flex-col gap-4 items-center grow"
+    >
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
       <div class="flex justify-center mt-auto pb-5">
         <Pagination

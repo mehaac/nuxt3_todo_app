@@ -16,7 +16,9 @@ useHead({
   title: appName,
 })
 
-const accepted = useCookie<boolean>('accepted')
+const accepted = useCookie<boolean>('accepted', {
+  maxAge: 60 * 60 * 24 * 31 * 12,
+})
 
 const show = ref(false)
 
