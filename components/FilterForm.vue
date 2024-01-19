@@ -20,7 +20,3 @@ const searchStore = useSearchStore()
     </div>
   </div>
 </template>
-
-<style>
-
-</style>
