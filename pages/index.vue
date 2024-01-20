@@ -1,20 +1,8 @@
 <script lang="ts" setup>
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useQueryClient } from '@tanstack/vue-query'
 import { vAutoAnimate } from '@formkit/auto-animate/vue'
 import { taskDtoSchema } from '~/server/utils'
-import {
-  Pagination,
-  PaginationEllipsis,
-  PaginationFirst,
-  PaginationLast,
-  PaginationList,
-  PaginationListItem,
-  PaginationNext,
-  PaginationPrev,
-} from '~/components/ui/pagination'
-import {
-  Button,
-} from '~/components/ui/button'
+
 import { useSearchStore } from '~/stores/search'
 
 definePageMeta({
@@ -22,33 +10,18 @@ definePageMeta({
 })
 
 const queryClient = useQueryClient()
-const limit = ref(3)
-const currentPage = ref(1)
+
 const searchStore = useSearchStore()
 const { params } = storeToRefs(searchStore)
-const calcOffset = computed(() => {
-  return (currentPage.value - 1) * limit.value
-})
-const { data: tasks, status } = useQuery({
-  queryKey: ['task', 'all', 'offset: ', calcOffset, 'limit: ', limit, params],
-  queryFn: async () => await $fetch('/api/task/', {
-    query: {
-      offset: calcOffset.value,
-      limit: limit.value,
-      search: params.value.filter,
-      priority: params.value.priority,
-      status: params.value.status,
-    },
-    method: 'GET',
-  }),
-  staleTime: 1000 * 60 * 5,
-})
+
+const { calcOffset, currentPage, limit } = useUsePagination()
+const { data: tasks, status } = useUseTaskQuery(calcOffset, limit, params)
 
 const parsedData = computed(() => {
   return taskDtoSchema.array().safeParse(tasks.value?.[0])
 })
 const taskCount = computed(() => {
-  return tasks.value?.[1].count || 0
+  return +tasks.value?.[1].count || 0
 })
 watch(tasks, (current) => {
   if (current) {
@@ -67,36 +40,7 @@ watch(tasks, (current) => {
       class="flex flex-col gap-4 items-center grow"
     >
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
-      <div class="flex justify-center mt-auto pb-5">
-        <Pagination
-          v-if="+taskCount !== 0"
-          v-slot="{ page }"
-          v-model:page="currentPage"
-          :total="+taskCount"
-          :sibling-count="1"
-          :items-per-page="limit"
-          show-edges
-          :default-page="1"
-          class=""
-        >
-          <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-            <PaginationFirst />
-            <PaginationPrev />
-
-            <template v-for="(item, index) in items">
-              <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'">
-                  {{ item.value }}
-                </Button>
-              </PaginationListItem>
-              <PaginationEllipsis v-else :key="item.type" :index="index" />
-            </template>
-
-            <PaginationNext />
-            <PaginationLast />
-          </PaginationList>
-        </Pagination>
-      </div>
+      <TaskPagination v-model="currentPage" :task-count="taskCount" :limit="limit" />
     </div>
 
     <div
