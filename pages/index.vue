@@ -51,16 +51,16 @@ function handleChecked({ id }: { id: string }) {
 </script>
 
 <template>
-  <div class="flex flex-col px-4 sm:px-12 gap-4 relative grow overflow-y-scroll">
+  <div class="flex flex-col px-4 sm:px-12 gap-4 relative grow overflow-y-auto">
     <div
       v-if="status === 'success' && parsedData.success"
       v-auto-animate
       class="flex flex-col gap-4 items-center grow"
     >
       <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" @checked="handleChecked" />
+
       <TaskPagination v-model="currentPage" :task-count="taskCount" :limit="limit" />
     </div>
-
     <div
       v-else
       v-auto-animate

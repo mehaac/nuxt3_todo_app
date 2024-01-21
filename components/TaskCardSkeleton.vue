@@ -2,39 +2,22 @@
 import { UiSeparator } from './ui/separator'
 import {
   Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 </script>
 
 <template>
   <Card
-    class="overflow-hidden flex flex-col max-w-xl h-[264px] w-full min-w-[320px]" as="article"
+    class="flex w-full max-w-xl" as="article"
   >
-    <CardHeader class="">
-      <div class="flex gap-4">
-        <div>
-          <Skeleton class="w-12 h-8" />
-        </div>
-        <div>
-          <Skeleton class="w-24 h-8" />
-        </div>
-        <div class="ml-auto">
-          <Skeleton class="w-32 h-8" />
-        </div>
-      </div>
-    </CardHeader>
-    <UiSeparator orientation="horizontal" class="mb-5" />
-    <CardContent class="flex flex-col gap-2  grow-[2]">
-      <Skeleton class="w-full h-full" />
-    </CardContent>
-    <UiSeparator orientation="horizontal" class="mb-5 text-start" />
-    <CardFooter>
-      <div class="flex gap-4 items-center justify-between">
-        <Skeleton class="w-20 h-8" />
-      </div>
-    </CardFooter>
+    <div class="flex items-center p-2 gap-2 shrink-0">
+      <Skeleton class="w-4 h-4" />
+      <Skeleton class="w-12 h-8" />
+      <Skeleton class="w-12 h-8" />
+    </div>
+    <UiSeparator orientation="vertical" class="mx-2" />
+    <div class="flex grow items-center p-2">
+      <Skeleton class="w-full h-4" />
+    </div>
   </Card>
 </template>
