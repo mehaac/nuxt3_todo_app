@@ -11,6 +11,8 @@ definePageMeta({
 
 const queryClient = useQueryClient()
 
+const checked = useChecked()
+
 const searchStore = useSearchStore()
 const { params } = storeToRefs(searchStore)
 
@@ -30,6 +32,22 @@ watch(tasks, (current) => {
     })
   }
 })
+
+function getCheckedSet({ id }: { id: string }) {
+  const checkedSet = new Set(checked.value)
+  if (checkedSet.has(id)) {
+    checkedSet.delete(id)
+    return checkedSet
+  }
+  else {
+    return checkedSet.add(id)
+  }
+}
+
+function handleChecked({ id }: { id: string }) {
+  const checkedSet = getCheckedSet({ id })
+  checked.value = Array.from(checkedSet)
+}
 </script>
 
 <template>
@@ -39,7 +57,7 @@ watch(tasks, (current) => {
       v-auto-animate
       class="flex flex-col gap-4 items-center grow"
     >
-      <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" />
+      <TaskCard v-for="n in parsedData.data" :key="n.id" :task="n" @checked="handleChecked" />
       <TaskPagination v-model="currentPage" :task-count="taskCount" :limit="limit" />
     </div>
 
