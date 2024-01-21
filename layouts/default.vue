@@ -21,10 +21,12 @@ const { handleDelete, size } = useDelete()
       <UiSeparator orientation="horizontal" />
     </div>
     <main class="flex gap-2 flex-col relative grow-[1] overflow-hidden">
-      <div v-auto-animate class="h-20 flex justify-center items-center">
-        <Button v-if="size" class="ml-auto" variant="destructive" @click="handleDelete">
-          Delete
-        </Button>
+      <div v-auto-animate class="flex py-4 justify-center items-center ">
+        <div v-if="size" class="px-4">
+          <Button variant="destructive" @click="handleDelete">
+            Delete
+          </Button>
+        </div>
         <FilterForm />
       </div>
       <slot>[Slot] </slot>
