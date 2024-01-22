@@ -4,9 +4,7 @@ import { UiLarge } from './ui/typography'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
-import {
-  Card,
-} from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { UiSeparator } from '@/components/ui/separator'
 import TaskFormPrioritySelect from '@/components/task/form/PrioritySelect.vue'
 import TaskFormStatusSelect from '@/components/task/form/StatusSelect.vue'
