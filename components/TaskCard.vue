@@ -48,7 +48,7 @@ const { handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = use
 </script>
 
 <template>
-  <Card class="flex w-full max-w-xl relative" as="article">
+  <Card class="flex w-full max-w-xl relative items-center" as="article">
     <div class="flex items-center justify-center p-2 shrink-0 ">
       <Checkbox @update:checked="emit('checked', { id: task.id })" />
     </div>
@@ -120,7 +120,7 @@ const { handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = use
 .loading-enter-active,
 .loading-leave-active {
   transition: all 1s linear;
-  right: -2.5rem;
+  right: 0rem;
 }
 .loading-leave-to {
   transform: translate3d(4rem, 0, 0);
