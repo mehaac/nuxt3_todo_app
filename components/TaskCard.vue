@@ -22,29 +22,7 @@ const emit = defineEmits<{
   checked: [val: { id: string }]
 }>()
 
-const { handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
-
-/*
-    <Tooltip>
-      <TooltipTrigger>Hover</TooltipTrigger>
-      <TooltipContent>
-        <p>Add to library</p>
-      </TooltipContent>
-    </Tooltip>
-      <Popover>
-    <PopoverTrigger>
-      Open popover
-    </PopoverTrigger>
-    <PopoverContent />
-  </Popover>
-
-    <HoverCard>
-    <HoverCardTrigger>Hover</HoverCardTrigger>
-    <HoverCardContent>
-      The Vue Framework – created and maintained by @vuejs.
-    </HoverCardContent>
-  </HoverCard>
-*/
+const { handleUpdateText, isDeleting, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
 </script>
 
 <template>
