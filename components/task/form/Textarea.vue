@@ -1,13 +1,18 @@
 <script lang="ts" setup>
+import { useField } from 'vee-validate'
 import { FormControl, FormDescription, FormField, FormItem } from '~/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { UiMuted } from '~/components/ui/typography'
 
 interface Props {
   disabled?: boolean
+  default?: string
 }
-
-defineProps<Props>()
+const props = defineProps<Props>()
+const { setValue } = useField('text')
+onMounted(() => {
+  setValue(props.default)
+})
 </script>
 
 <template>
