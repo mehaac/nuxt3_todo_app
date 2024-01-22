@@ -19,12 +19,7 @@ const emit = defineEmits<{
   checked: [val: { id: string }]
 }>()
 
-const { handleDelete, handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
-
-// YYYY-MM-DD HH:mm:ss Do MMMM HH:mm
-const formattedCreatedAt = useDateFormat(props.task.createdAt, 'Do MMMM HH:mm', {
-  // locales: 'ru-RU',
-})
+const { handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
 </script>
 
 <template>
