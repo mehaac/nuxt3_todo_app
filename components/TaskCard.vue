@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Button } from './ui/button'
 import { UiLarge } from './ui/typography'
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 import {
   Card,
 } from '@/components/ui/card'
@@ -20,6 +23,28 @@ const emit = defineEmits<{
 }>()
 
 const { handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
+
+/*
+    <Tooltip>
+      <TooltipTrigger>Hover</TooltipTrigger>
+      <TooltipContent>
+        <p>Add to library</p>
+      </TooltipContent>
+    </Tooltip>
+      <Popover>
+    <PopoverTrigger>
+      Open popover
+    </PopoverTrigger>
+    <PopoverContent />
+  </Popover>
+
+    <HoverCard>
+    <HoverCardTrigger>Hover</HoverCardTrigger>
+    <HoverCardContent>
+      The Vue Framework – created and maintained by @vuejs.
+    </HoverCardContent>
+  </HoverCard>
+*/
 </script>
 
 <template>
@@ -29,37 +54,65 @@ const { handleUpdateText, isDeleting, isEdited, isUpdating, toggleEdited } = use
     </div>
     <UiSeparator orientation="vertical" class="mx-2" />
     <div class="flex items-center p-2 gap-2 shrink-0 w-48">
-      <TaskFormPrioritySelect :disabled="isDeleting || isUpdating" />
-      <TaskFormStatusSelect :disabled="isDeleting || isUpdating" />
+      <Tooltip :delay-duration="0">
+        <TooltipTrigger>
+          <TaskFormPrioritySelect :disabled="isDeleting || isUpdating" />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Priority</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip :delay-duration="0">
+        <TooltipTrigger>
+          <TaskFormStatusSelect :disabled="isDeleting || isUpdating" />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Status</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
     <UiSeparator orientation="vertical" class="mx-2" />
-    <div class="flex grow items-center">
-      <Button v-show="!isEdited" variant="link" class="min-h-full h-full" :disabled="isDeleting || isUpdating">
-        <UiLarge class="break-all line-clamp-1" @click="toggleEdited">
-          {{ task.text }}
-        </UiLarge>
-      </Button>
-      <div v-show="isEdited" class="flex flex-col gap-2 grow">
-        <TaskFormTextarea />
-        <Button
-          variant="outline" @click="handleUpdateText"
-        >
-          Edit
-        </Button>
-      </div>
-      <Transition name="loading">
-        <div
-          v-if="isUpdating"
-          class="absolute"
-        >
-          <Icon
-            name="carbon:progress-bar-round"
-            size="32"
-            class="animate-spin"
-          />
+    <HoverCard :open-delay="100" :close-delay="100">
+      <HoverCardTrigger>
+        <div class="flex grow items-center">
+          <Popover>
+            <PopoverTrigger as-child>
+              <Button v-show="true" variant="link" class="min-h-full h-full" :disabled="isDeleting || isUpdating">
+                <UiLarge class="break-all line-clamp-1" @click="toggleEdited">
+                  {{ task.text }}
+                </UiLarge>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <div class="flex flex-col gap-2 grow">
+                <TaskFormTextarea :default="task.text" :disabled="isUpdating" />
+                <Button
+                  :disabled="isUpdating"
+                  variant="outline" @click="handleUpdateText"
+                >
+                  Edit
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <Transition name="loading">
+            <div
+              v-if="isUpdating"
+              class="absolute"
+            >
+              <Icon
+                name="carbon:progress-bar-round"
+                size="32"
+                class="animate-spin"
+              />
+            </div>
+          </Transition>
         </div>
-      </Transition>
-    </div>
+      </HoverCardTrigger>
+      <HoverCardContent side="top">
+        {{ task.text }}
+      </HoverCardContent>
+    </HoverCard>
   </Card>
 </template>
 
