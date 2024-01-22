@@ -23,10 +23,12 @@ const parsedData = computed(() => {
   return taskDtoSchema.array().safeParse(tasks.value?.[0])
 })
 const taskCount = computed(() => {
+  // @ts-expect-error need to make proper types
   return +tasks.value?.[1].count || 0
 })
 watch(tasks, (current) => {
   if (current) {
+    // @ts-expect-error need to make proper types
     current[0].forEach((task) => {
       queryClient.setQueryData(['task', 'detail', task.id], () => task)
     })
