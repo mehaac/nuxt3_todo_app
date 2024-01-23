@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     'radix-vue/nuxt',
     'nuxt-icon',
+    '@nuxt/content',
   ],
   shadcn: {
     /**
