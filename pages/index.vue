@@ -59,7 +59,7 @@ function handleChecked({ id }: { id: string }) {
 </script>
 
 <template>
-  <div class="flex flex-col px-4 sm:px-12 gap-4 relative overflow-hidden grow overflow-y-auto">
+  <div class="flex flex-col gap-4 relative overflow-hidden grow overflow-y-auto">
     <div
       v-if="status === 'success' && parsedData.success"
       v-auto-animate
