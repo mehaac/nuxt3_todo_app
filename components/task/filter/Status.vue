@@ -32,7 +32,7 @@ function handleClear() {
     <PopoverTrigger as-child>
       <Button size="sm" variant="outline" class="h-8 border-dashed min-w-40 flex justify-start">
         <Icon name="carbon:add" class="w-4 h-4" />
-        <span v-if="!selectedValues.size">Filter by priority</span>
+        <span v-if="!selectedValues.size">Filter by status</span>
         <template v-if="selectedValues.size > 0">
           <UiSeparator orientation="vertical" class="mx-2 h-4" />
           <div class="space-x-1 lg:flex">

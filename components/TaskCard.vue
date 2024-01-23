@@ -30,7 +30,7 @@ const { handleUpdateText, isDeleting, isUpdating, toggleEdited } = useUseTaskUpd
       <Checkbox @update:checked="emit('checked', { id: task.id })" />
     </div>
     <UiSeparator orientation="vertical" class="mx-2" />
-    <div class="flex items-center p-2 gap-2 shrink-0 w-48">
+    <div class="flex items-center p-2 gap-2 shrink-0 w-48 ">
       <Tooltip :delay-duration="0">
         <TooltipTrigger>
           <TaskFormPrioritySelect :disabled="isDeleting || isUpdating" />
@@ -40,7 +40,7 @@ const { handleUpdateText, isDeleting, isUpdating, toggleEdited } = useUseTaskUpd
         </TooltipContent>
       </Tooltip>
       <Tooltip :delay-duration="0">
-        <TooltipTrigger>
+        <TooltipTrigger class="w-full">
           <TaskFormStatusSelect :disabled="isDeleting || isUpdating" />
         </TooltipTrigger>
         <TooltipContent>
