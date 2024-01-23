@@ -20,6 +20,7 @@ const emit = defineEmits<{
   checked: [val: { id: string }]
 }>()
 
+const isPopover = ref(false)
 const { handleUpdateText, isDeleting, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
 </script>
 
@@ -51,23 +52,38 @@ const { handleUpdateText, isDeleting, isUpdating, toggleEdited } = useUseTaskUpd
     <HoverCard :open-delay="100" :close-delay="100">
       <HoverCardTrigger>
         <div class="flex grow items-center">
-          <Popover>
+          <Popover v-model:open="isPopover">
             <PopoverTrigger as-child>
-              <Button v-show="true" variant="link" class="min-h-full h-full" :disabled="isDeleting || isUpdating">
+              <Button variant="link" class="min-h-full h-full" :disabled="isDeleting || isUpdating">
                 <UiLarge class="break-all line-clamp-1" @click="toggleEdited">
                   {{ task.text }}
                 </UiLarge>
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <div class="flex flex-col gap-2 grow">
+              <div class="flex flex-col gap-2 pt-4">
                 <TaskFormTextarea :default="task.text" :disabled="isUpdating" />
+
                 <Button
                   :disabled="isUpdating"
-                  variant="outline" @click="handleUpdateText"
+                  variant="secondary"
+                  class="flex gap-2"
+                  @click="handleUpdateText"
                 >
+                  <Icon name="carbon:checkmark-filled" />
                   Edit
                 </Button>
+
+                <div class="absolute flex-none flex right-0 top-0 p-2">
+                  <Button
+                    :disabled="isUpdating"
+                    class="w-4 h-4 p-0"
+                    variant="outline"
+                    @click="isPopover = false"
+                  >
+                    <Icon name="carbon:close" />
+                  </Button>
+                </div>
               </div>
             </PopoverContent>
           </Popover>

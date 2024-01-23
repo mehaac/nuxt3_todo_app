@@ -22,7 +22,7 @@ onMounted(() => {
         <Textarea v-bind="componentField" :disabled="disabled" />
       </FormControl>
       <FormDescription>
-        <div class="w-full flex justify-end">
+        <div class="flex justify-end">
           <UiMuted
             :class="{
               'text-red-600': componentField.modelValue?.length > 255 || componentField.modelValue?.length < 4 } "
