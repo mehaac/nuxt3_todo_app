@@ -21,7 +21,11 @@ const emit = defineEmits<{
 }>()
 
 const isPopover = ref(false)
-const { handleUpdateText, isDeleting, isUpdating, toggleEdited } = useUseTaskUpdateForm(props.task)
+const { handleUpdateText, isDeleting, isUpdating, toggleEdited, resetForm } = useUseTaskUpdateForm(props.task)
+
+onUnmounted(() => {
+  resetForm()
+})
 </script>
 
 <template>

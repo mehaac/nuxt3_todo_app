@@ -56,6 +56,9 @@ function handleChecked({ id }: { id: string }) {
   const checkedSet = getCheckedSet({ id })
   checked.value = Array.from(checkedSet)
 }
+onUnmounted(() => {
+  resetChecked()
+})
 </script>
 
 <template>

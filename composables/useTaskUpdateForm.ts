@@ -42,9 +42,7 @@ export function useUseTaskUpdateForm(task: TaskDto) {
   function toggleEdited() {
     isEdited.value = !isEdited.value
   }
-  onUnmounted(() => {
-    resetForm()
-  })
+
   return {
     isEdited: readonly(isEdited),
     handleUpdateText,
@@ -52,5 +50,6 @@ export function useUseTaskUpdateForm(task: TaskDto) {
     isUpdating,
     isDeleting,
     toggleEdited,
+    resetForm,
   }
 }
