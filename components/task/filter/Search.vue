@@ -14,7 +14,7 @@ const searchStore = useSearchStore()
       @update:model-value="searchStore.setFilterSearch"
     />
     <Transition name="slide-fade">
-      <Button v-if="searchStore.filterSearch" size="sm" variant="outline" @click="searchStore.resetSearch">
+      <Button v-if="searchStore.filterSearch" variant="outline" @click="searchStore.resetSearch">
         <Icon name="carbon:reset" />
       </Button>
     </Transition>
