@@ -10,7 +10,7 @@ export function useUseTaskUpdateForm(task: TaskDto) {
 
   const { mutate: deleteTask, isPending: isDeleting } = useUseTaskMutate().deleteTask(task.id)
 
-  const { handleSubmit, values } = useForm({
+  const { handleSubmit, values, resetForm } = useForm({
     validationSchema: toTypedSchema(updateTaskSchema),
     initialValues: {
       priority: task.priority,
@@ -42,6 +42,9 @@ export function useUseTaskUpdateForm(task: TaskDto) {
   function toggleEdited() {
     isEdited.value = !isEdited.value
   }
+  onUnmounted(() => {
+    resetForm()
+  })
   return {
     isEdited: readonly(isEdited),
     handleUpdateText,

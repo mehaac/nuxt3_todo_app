@@ -25,6 +25,9 @@ export function useDelete() {
     resetChecked()
   }
 
+  onUnmounted(() => {
+    resetChecked()
+  })
   return {
     handleDelete,
     size: computed(() => checked.value.length),

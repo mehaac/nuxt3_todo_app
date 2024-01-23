@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+const filterStore = useSearchStore()
+
+onUnmounted(() => {
+  filterStore.restForm()
+})
 </script>
 
 <template>
