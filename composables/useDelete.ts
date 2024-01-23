@@ -28,5 +28,6 @@ export function useDelete() {
   return {
     handleDelete,
     size: computed(() => checked.value.length),
+    resetChecked,
   }
 }

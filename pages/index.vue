@@ -11,6 +11,7 @@ definePageMeta({
 
 const queryClient = useQueryClient()
 
+const { resetChecked } = useDelete()
 const checked = useChecked()
 
 const searchStore = useSearchStore()
@@ -18,6 +19,11 @@ const { params } = storeToRefs(searchStore)
 
 const { calcOffset, currentPage, limit } = useUsePagination()
 const { data: tasks, status } = useUseTaskQuery(calcOffset, limit, params)
+
+watchEffect(() => {
+  if (status.value === 'pending')
+    resetChecked()
+})
 
 const parsedData = computed(() => {
   return taskDtoSchema.array().safeParse(tasks.value?.[0])

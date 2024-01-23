@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 export function useUseTaskQuery(
   calcOffset: MaybeRefOrGetter<number>,
   limit: MaybeRefOrGetter<number>,
-  params: MaybeRefOrGetter<{ filter?: string, priority?: string, status?: string }>,
+  params: MaybeRefOrGetter<{ filter?: string, priority?: number[], status?: typeof TaskStatus[number][] }>,
 ) {
   const paramsRef = toRef(params)
   const limitRef = toRef(limit)
