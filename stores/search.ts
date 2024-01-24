@@ -7,11 +7,6 @@ export const useSearchStore = defineStore('search:store', () => {
 
   const searchStatus = useSearchStatus()
 
-  watchEffect(() => {
-    if (filterSearch.value)
-      searchStatus.value = 'typing'
-  })
-
   watchDebounced(filterSearch, () => {
     searchStatus.value = 'idle'
   }, {
