@@ -13,7 +13,7 @@ export const taskDtoSchema = z.object({
 })
 
 export const taskFormSchema = taskDtoSchema.omit({ id: true, userId: true }).extend({
-  priority: z.coerce.number({ required_error: 'Required priority', invalid_type_error: 'Required priority' }).min(0).max(5),
+  priority: z.coerce.string({ required_error: 'Required priority', invalid_type_error: 'Required priority' }).min(0).max(5),
   status: z.enum(TaskStatus, { required_error: 'Required status', invalid_type_error: 'Required status' }),
 })
 export const updateTaskSchema = taskFormSchema.omit({ createdAt: true }).partial()

@@ -15,6 +15,7 @@ defineProps<{
           ...componentField,
           modelValue: componentField.modelValue.toString(),
         }"
+        id="priority"
         :disabled="disabled"
       >
         <FormControl>

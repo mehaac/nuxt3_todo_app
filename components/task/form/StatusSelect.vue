@@ -12,7 +12,7 @@ defineProps<{
   <FormField v-slot="{ componentField }" name="status">
     <Select v-bind="componentField" :disabled="disabled">
       <SelectTrigger>
-        <SelectValue placeholder="Select status..." />
+        <SelectValue id="status" placeholder="Select status..." />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

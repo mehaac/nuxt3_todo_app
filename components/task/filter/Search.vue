@@ -6,7 +6,7 @@ const searchStore = useSearchStore()
 </script>
 
 <template>
-  <div class="flex gap-2">
+  <div class="flex gap-2 w-full">
     <Input
       :model-value="searchStore.filterSearch"
       type="text"
@@ -15,7 +15,7 @@ const searchStore = useSearchStore()
     />
     <Transition name="slide-fade">
       <Button v-if="searchStore.filterSearch" variant="outline" @click="searchStore.resetSearch">
-        <Icon name="carbon:reset" />
+        <Icon name="carbon:clean" />
       </Button>
     </Transition>
   </div>

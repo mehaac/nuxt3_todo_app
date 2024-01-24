@@ -17,7 +17,7 @@ function toggleDark() {
 </script>
 
 <template>
-  <Button v-if="color.value" variant="default" size="icon" class="flex-none" @click="toggleDark">
+  <Button v-if="color.value" variant="secondary" size="icon" class="flex-none" @click="toggleDark">
     <Icon :name="color.value === 'dark' ? 'i-carbon-sun' : 'i-carbon-moon'" size="24" />
   </Button>
 </template>

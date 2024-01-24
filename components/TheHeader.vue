@@ -36,6 +36,9 @@ async function handleLogout(e: Event) {
         </UiLarge>
       </NuxtLink>
       <slot />
+      <div class="flex grow px-4">
+        <TaskFilterSearch />
+      </div>
       <div class="flex items-center gap-4">
         <DarkToggle />
         <Tooltip :delay-duration="0">

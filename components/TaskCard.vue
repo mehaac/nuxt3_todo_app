@@ -20,8 +20,8 @@ const emit = defineEmits<{
   checked: [val: { id: string }]
 }>()
 
-const isPopover = ref(false)
-const { handleUpdateText, isDeleting, isUpdating, toggleEdited, resetForm } = useUseTaskUpdateForm(props.task)
+const checked = useChecked()
+const { handleUpdateText, isDeleting, isUpdating, toggleEdited, isEdited, resetForm } = useUseTaskUpdateForm(props.task)
 
 onUnmounted(() => {
   resetForm()
@@ -31,7 +31,7 @@ onUnmounted(() => {
 <template>
   <Card class="flex w-full max-w-xl relative items-center" as="article">
     <div class="flex items-center justify-center p-2 shrink-0 ">
-      <Checkbox @update:checked="emit('checked', { id: task.id })" />
+      <Checkbox :checked="checked.includes(task.id)" @update:checked="emit('checked', { id: task.id })" />
     </div>
     <UiSeparator orientation="vertical" class="mx-2" />
     <div class="flex items-center p-2 gap-2 shrink-0 w-48 ">
@@ -56,7 +56,7 @@ onUnmounted(() => {
     <HoverCard :open-delay="100" :close-delay="100">
       <HoverCardTrigger>
         <div class="flex grow items-center">
-          <Popover v-model:open="isPopover">
+          <Popover :open="isEdited">
             <PopoverTrigger as-child>
               <Button variant="link" class="min-h-full h-full" :disabled="isDeleting || isUpdating">
                 <UiLarge class="break-all line-clamp-1" @click="toggleEdited">
@@ -77,17 +77,6 @@ onUnmounted(() => {
                   <Icon name="carbon:checkmark-filled" />
                   Edit
                 </Button>
-
-                <div class="absolute flex-none flex right-0 top-0 p-2">
-                  <Button
-                    :disabled="isUpdating"
-                    class="w-4 h-4 p-0"
-                    variant="outline"
-                    @click="isPopover = false"
-                  >
-                    <Icon name="carbon:close" />
-                  </Button>
-                </div>
               </div>
             </PopoverContent>
           </Popover>

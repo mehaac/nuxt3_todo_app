@@ -14,10 +14,12 @@ export function useCreateTaskForm() {
     initialValues: {
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
+      status: 'todo',
+      priority: '1',
     },
   })
 
-  const onSubmit = form.handleSubmit(async (values) => {
+  const onSubmit = (fn: () => void) => form.handleSubmit(async (values) => {
     try {
       await $fetch('/api/task/', {
         key: 'tasks',
@@ -30,6 +32,7 @@ export function useCreateTaskForm() {
         title: 'Success',
         description: `Task was added to your task list`,
       })
+      fn()
     }
     catch (e) {
       console.error(e)

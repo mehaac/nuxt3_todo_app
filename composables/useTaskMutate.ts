@@ -8,7 +8,7 @@ export function useUseTaskMutate() {
     updateTask: (taskId: string) => {
       return useMutation({
         mutationKey: ['task', 'detail', taskId],
-        mutationFn: async (body: Partial<TaskDto>) => await $fetch(`/api/task/${taskId}`, {
+        mutationFn: async (body: Partial<UpdateTask>) => await $fetch(`/api/task/${taskId}`, {
           method: 'PUT',
           body,
         }),

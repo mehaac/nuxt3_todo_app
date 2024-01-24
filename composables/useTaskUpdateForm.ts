@@ -13,7 +13,7 @@ export function useUseTaskUpdateForm(task: TaskDto) {
   const { handleSubmit, values, resetForm } = useForm({
     validationSchema: toTypedSchema(updateTaskSchema),
     initialValues: {
-      priority: task.priority,
+      priority: task.priority.toString(),
       status: task.status,
       text: task.text,
       updatedAt: new Date().toISOString(),
@@ -27,7 +27,7 @@ export function useUseTaskUpdateForm(task: TaskDto) {
   watch(() => toValue(values.priority), () => {
     submit()
   })
-  // // status watch
+
   watch(() => toValue(values.status), () => {
     submit()
   })
@@ -44,7 +44,7 @@ export function useUseTaskUpdateForm(task: TaskDto) {
   }
 
   return {
-    isEdited: readonly(isEdited),
+    isEdited,
     handleUpdateText,
     handleDelete,
     isUpdating,

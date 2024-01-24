@@ -4,7 +4,7 @@ import { Button } from '~/components/ui/button'
 </script>
 
 <template>
-  <Button variant="destructive" class="flex gap-2">
+  <Button variant="destructive" class="flex gap-2 py-0 h-8">
     <Icon name="carbon:trash-can" class="w-4 h-4" />
     <UiLead><slot /></UiLead>
   </Button>
