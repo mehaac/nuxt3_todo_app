@@ -12,6 +12,7 @@ const searchStore = useSearchStore()
         :model-value="searchStore.filterSearch"
         type="text"
         placeholder="Search..."
+        class="pr-16"
         @update:model-value="searchStore.setFilterSearch"
       />
 
@@ -20,12 +21,17 @@ const searchStore = useSearchStore()
           <div class="animate-progress w-full h-full bg-secondary origin-left-right rounded-md" />
         </div>
       </div>
+      <Transition name="slide-fade">
+        <Button
+          v-if="searchStore.filterSearch"
+          variant="ghost"
+          class="absolute right-2 top-0"
+          @click="searchStore.resetSearch"
+        >
+          <Icon name="carbon:clean" />
+        </Button>
+      </Transition>
     </div>
-    <Transition name="slide-fade">
-      <Button v-if="searchStore.filterSearch" variant="outline" @click="searchStore.resetSearch">
-        <Icon name="carbon:clean" />
-      </Button>
-    </Transition>
   </div>
 </template>
 

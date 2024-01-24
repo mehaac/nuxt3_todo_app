@@ -3,7 +3,6 @@ import { Button } from './ui/button'
 import { UiLarge } from './ui/typography'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 import { Card } from '@/components/ui/card'
 import { UiSeparator } from '@/components/ui/separator'
 import TaskFormPrioritySelect from '@/components/task/form/PrioritySelect.vue'
@@ -35,7 +34,7 @@ onUnmounted(() => {
     </div>
     <UiSeparator orientation="vertical" class="mx-2" />
     <div class="flex items-center p-2 gap-2 shrink-0 w-48 ">
-      <Tooltip :delay-duration="0">
+      <Tooltip :delay-duration="0" disable-hoverable-content>
         <TooltipTrigger>
           <TaskFormPrioritySelect :disabled="isDeleting || isUpdating" />
         </TooltipTrigger>
@@ -43,7 +42,7 @@ onUnmounted(() => {
           <p>Priority</p>
         </TooltipContent>
       </Tooltip>
-      <Tooltip :delay-duration="0">
+      <Tooltip :delay-duration="0" disable-hoverable-content>
         <TooltipTrigger class="w-full">
           <TaskFormStatusSelect :disabled="isDeleting || isUpdating" />
         </TooltipTrigger>
@@ -53,8 +52,8 @@ onUnmounted(() => {
       </Tooltip>
     </div>
     <UiSeparator orientation="vertical" class="mx-2" />
-    <HoverCard :open-delay="100" :close-delay="100">
-      <HoverCardTrigger>
+    <Tooltip :delay-duration="0" disable-hoverable-content>
+      <TooltipTrigger>
         <div class="flex grow items-center">
           <Popover :open="isEdited">
             <PopoverTrigger as-child>
@@ -93,11 +92,11 @@ onUnmounted(() => {
             </div>
           </Transition>
         </div>
-      </HoverCardTrigger>
-      <HoverCardContent side="top">
+      </TooltipTrigger>
+      <TooltipContent side="top">
         {{ task.text }}
-      </HoverCardContent>
-    </HoverCard>
+      </TooltipContent>
+    </Tooltip>
   </Card>
 </template>
 

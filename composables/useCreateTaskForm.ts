@@ -17,6 +17,7 @@ export function useCreateTaskForm() {
       status: 'todo',
       priority: '1',
     },
+    validateOnMount: false,
   })
 
   const onSubmit = (fn: () => void) => form.handleSubmit(async (values) => {
@@ -40,5 +41,6 @@ export function useCreateTaskForm() {
   })
   return {
     onSubmit,
+    form,
   }
 }

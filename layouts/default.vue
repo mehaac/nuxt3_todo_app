@@ -16,7 +16,7 @@ function toggleShowCreateForm() {
   <div class="h-[100dvh] overflow-hidden  relative flex flex-col">
     <TheHeader />
     <UiSeparator orientation="horizontal" class="mb-4" />
-    <main v-auto-animate class="flex gap-2 px-4 flex-col relative grow overflow-hidden">
+    <main class="flex gap-2 px-4 flex-col relative grow overflow-hidden">
       <div v-auto-animate class="flex max-w-xl w-full self-center">
         <div v-if="size" class="flex gap-2 pr-2">
           <TaskDeleteBtn @click="handleDelete">
@@ -41,7 +41,7 @@ function toggleShowCreateForm() {
           </template>
         </Button>
       </div>
-      <div v-if="showCreateForm" class="max-w-min self-center rounded-md relative p-4 border-border border-2">
+      <div v-if="showCreateForm" class="max-w-xl self-center w-full flex rounded-md relative p-4 border-border border-2">
         <TaskCreateForm @success="showCreateForm = false" />
       </div>
       <slot>

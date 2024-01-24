@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Button } from './ui/button'
 import { Label } from './ui/label'
+import { Button } from '@/components/ui/button'
 
 const emit = defineEmits<{
   success: []
@@ -15,30 +15,28 @@ async function handleSubmit(evt: Event) {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit">
-    <div class="flex flex-col gap-4 items-center w-full">
-      <div class="flex flex-col gap-6 min-w-[320px]">
-        <TaskFormTextarea />
-        <div class="flex gap-2 items-center">
-          <div class="flex flex-1  flex-col relative">
-            <Label for="status" class="absolute -top-6">
-              Status
-            </Label>
-            <TaskFormStatusSelect />
-          </div>
-          <div class="flex flex-col flex-1 relative">
-            <Label for="priority" class="absolute -top-6">
-              Priority
-            </Label>
-            <TaskFormPrioritySelect />
-          </div>
-          <div>
-            <Button class="" @click="handleSubmit">
-              Submit
-            </Button>
-          </div>
-        </div>
+  <form class="w-full gap-2 pt-4 flex" @submit.prevent="handleSubmit">
+    <div class="flex gap-2 shrink-0">
+      <div class="flex relative">
+        <Label for="priority" class="absolute -top-6">
+          Priority
+        </Label>
+        <TaskFormPrioritySelect />
       </div>
+      <div class="flex relative">
+        <Label for="status" class="absolute -top-6">
+          Status
+        </Label>
+        <TaskFormStatusSelect />
+      </div>
+    </div>
+    <div class="w-full pb-4 relative">
+      <TaskFormInput />
+    </div>
+    <div class="flex shrink-0">
+      <Button size="icon" variant="outline" @click="handleSubmit">
+        <Icon name="carbon:add-filled" class="w-4 h-4" />
+      </Button>
     </div>
   </form>
 </template>
