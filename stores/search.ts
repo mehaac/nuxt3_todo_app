@@ -5,6 +5,22 @@ export const useSearchStore = defineStore('search:store', () => {
   const filterPriority = ref<number[]>([])
   const filterStatus = ref<typeof TaskStatus[number][]>([])
 
+  const searchStatus = useSearchStatus()
+
+  watchEffect(() => {
+    if (filterSearch.value)
+      searchStatus.value = 'typing'
+  })
+
+  watchDebounced(filterSearch, () => {
+    searchStatus.value = 'idle'
+  }, {
+    onTrigger: () => {
+      searchStatus.value = 'typing'
+    },
+    debounce: 1000,
+  })
+
   const debouncedFilterSearch = debouncedRef(filterSearch, 1000)
 
   const params = computed(() => {
@@ -44,6 +60,7 @@ export const useSearchStore = defineStore('search:store', () => {
   }
 
   return {
+    searchStatus: readonly(searchStatus),
     setFilterStatus,
     setFilterPriority,
     setFilterSearch,

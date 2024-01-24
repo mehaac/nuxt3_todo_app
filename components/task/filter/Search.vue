@@ -6,13 +6,21 @@ const searchStore = useSearchStore()
 </script>
 
 <template>
-  <div class="flex gap-2 w-full">
-    <Input
-      :model-value="searchStore.filterSearch"
-      type="text"
-      placeholder="Search..."
-      @update:model-value="searchStore.setFilterSearch"
-    />
+  <div class="flex gap-2 w-full ">
+    <div class="relative w-full">
+      <Input
+        :model-value="searchStore.filterSearch"
+        type="text"
+        placeholder="Search..."
+        @update:model-value="searchStore.setFilterSearch"
+      />
+
+      <div v-if="searchStore.searchStatus !== 'idle'" class="w-full absolute -top-3">
+        <div class="h-2 w-full bg-background overflow-hidden rounded-md">
+          <div class="animate-progress w-full h-full bg-secondary origin-left-right rounded-md" />
+        </div>
+      </div>
+    </div>
     <Transition name="slide-fade">
       <Button v-if="searchStore.filterSearch" variant="outline" @click="searchStore.resetSearch">
         <Icon name="carbon:clean" />

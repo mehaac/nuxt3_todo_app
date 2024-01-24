@@ -13,6 +13,7 @@ const queryClient = useQueryClient()
 
 const { resetChecked } = useDelete()
 const checked = useChecked()
+const searchStatus = useSearchStatus()
 
 const searchStore = useSearchStore()
 const { params } = storeToRefs(searchStore)
@@ -34,6 +35,13 @@ watch(tasks, (current) => {
       queryClient.setQueryData(['task', 'detail', task.id], () => task)
     })
   }
+})
+
+watchEffect(() => {
+  if (status.value === 'pending')
+    searchStatus.value = 'fetching'
+  if (status.value === 'success')
+    searchStatus.value = 'idle'
 })
 
 function getCheckedSet({ id }: { id: string }) {

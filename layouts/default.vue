@@ -41,7 +41,7 @@ function toggleShowCreateForm() {
           </template>
         </Button>
       </div>
-      <div v-if="showCreateForm" class="w-full relative">
+      <div v-if="showCreateForm" class="max-w-min self-center rounded-md relative p-4 border-border border-2">
         <TaskCreateForm @success="showCreateForm = false" />
       </div>
       <slot>
