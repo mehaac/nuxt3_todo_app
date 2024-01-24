@@ -28,12 +28,13 @@ function createDefaultTasks(userId: string) {
   const arr: TaskDto[] = []
 
   for (let i = 0; i < defaultTasks.length; i++) {
+    const time = new Date(Date.now() + (i * 100_000)).toISOString()
     arr[i] = {
       ...defaultTasks[i],
       id: crypto.randomUUID(),
       userId,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: time,
+      updatedAt: time,
     }
   }
 
