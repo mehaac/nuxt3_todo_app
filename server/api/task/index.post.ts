@@ -1,6 +1,6 @@
 import { db, schema } from '~/server/db'
 
-import { taskFormSchema } from '~/server/utils'
+import { taskCreateSchema } from '~/server/utils'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   if (!user)
     throw createError({ statusCode: 401, message: 'Unauthorized' })
   const parsedBody = await readValidatedBody(event, (body) => {
-    return taskFormSchema.parse(body)
+    return taskCreateSchema.parse(body)
   })
 
   try {

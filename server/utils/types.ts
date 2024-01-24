@@ -6,10 +6,14 @@ export const taskDtoSchema = z.object({
   id: z.string(),
   userId: z.string(),
   text: z.string().min(4).max(255),
-  priority: z.number().min(0).max(5),
+  priority: z.number().min(1).max(5),
   status: z.enum(TaskStatus),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
+})
+
+export const taskCreateSchema = taskDtoSchema.omit({ id: true, userId: true }).extend({
+  priority: z.coerce.number().min(1).max(5),
 })
 
 export const taskFormSchema = taskDtoSchema.omit({ id: true, userId: true }).extend({

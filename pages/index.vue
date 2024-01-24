@@ -8,6 +8,8 @@ import { useSearchStore } from '~/stores/search'
 definePageMeta({
   middleware: ['protected'],
 })
+// TODO: implement profile init
+await $fetch('/api/profile/')
 
 const queryClient = useQueryClient()
 
